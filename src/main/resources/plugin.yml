@@ -1,0 +1,6 @@
+name: ${project.name}
+main: net.daboross.bukkitdev.arrows.ArrowsPlugin
+version: ${project.version}
+author: Dabo Ross
+description: Rarrows
+url: https://github.com/daboross/Arrows
