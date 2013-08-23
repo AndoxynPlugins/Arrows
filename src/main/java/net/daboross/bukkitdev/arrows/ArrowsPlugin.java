@@ -18,9 +18,11 @@ package net.daboross.bukkitdev.arrows;
 
 import java.io.IOException;
 import java.util.logging.Level;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.Listener;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.MetricsLite;
@@ -29,12 +31,15 @@ import org.mcstats.MetricsLite;
  *
  * @author daboross
  */
-public class ArrowsPlugin extends JavaPlugin implements Listener {
+public class ArrowsPlugin extends JavaPlugin {
+
+    private ItemArrowTracker arrow;
 
     @Override
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(this, this);
+        pm.registerEvents(new ArrowAttackListener(this), this);
+        arrow = new ItemArrowTracker();
         MetricsLite metrics = null;
         try {
             metrics = new MetricsLite(this);
@@ -52,10 +57,26 @@ public class ArrowsPlugin extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("")) {
+        if (cmd.getName().equalsIgnoreCase("ua")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.DARK_RED + "You aren't a player.");
+                return true;
+            }
+            Player p = (Player) sender;
+            PlayerInventory inv = p.getInventory();
+            int slot = inv.firstEmpty();
+            if (slot < 0) {
+                sender.sendMessage(ChatColor.DARK_RED + "You don't have room.");
+                return true;
+            }
+            inv.setItem(slot, arrow.getArrow());
         } else {
             sender.sendMessage("Arrows doesn't know about the command /" + cmd.getName());
         }
         return true;
+    }
+
+    public ItemArrowTracker getArrow() {
+        return arrow;
     }
 }

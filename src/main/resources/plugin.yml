@@ -2,5 +2,7 @@ name: ${project.name}
 main: net.daboross.bukkitdev.arrows.ArrowsPlugin
 version: ${project.version}
 author: Dabo Ross
-description: Rarrows
+description: ${project.description}
 url: https://github.com/daboross/Arrows
+commands:
+  ua:
