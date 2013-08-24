@@ -16,21 +16,17 @@
  */
 package net.daboross.bukkitdev.arrows;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import org.bukkit.Location;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 /**
  *
@@ -38,11 +34,12 @@ import org.bukkit.util.Vector;
  */
 public class ArrowAttackListener implements Listener {
 
-    private final Map<UUID, Boolean> arrows = new HashMap<UUID, Boolean>();
     private final ArrowsPlugin plugin;
+    private final ArrowMetadata metadata;
 
     public ArrowAttackListener(ArrowsPlugin plugin) {
         this.plugin = plugin;
+        this.metadata = plugin.getMetadata();
     }
 
     @EventHandler
@@ -50,35 +47,28 @@ public class ArrowAttackListener implements Listener {
         Player p = evt.getPlayer();
         int level = plugin.getArrow().getLevel(p.getItemInHand());
         if (level >= 0) {
-            Location pos = p.getEyeLocation().clone();
-            Vector v = pos.getDirection();
-            pos.add(v.clone().multiply(2));
-            Vector playerV = p.getVelocity().add(v.clone().multiply(-0.4));
-            for (int i = 0; i < 2; i++) {
-                Arrow a = p.getWorld().spawnArrow(pos, v, 2.0f, 2);
-                a.setBounce(true);
-                a.setShooter(p);
-                arrows.put(a.getUniqueId(), Boolean.FALSE);
-            }
-            p.setVelocity(playerV);
             evt.setCancelled(true);
+            plugin.getAttack().launchAttack(p, level);
         }
     }
 
     @EventHandler
-    public void onHit(final ProjectileHitEvent evt) {
+    public void onHit(ProjectileHitEvent evt) {
+        final Entity e = evt.getEntity();
         new BukkitRunnable() {
             @Override
             public void run() {
-                UUID uuid = evt.getEntity().getUniqueId();
-                Boolean b = arrows.get(uuid);
-                if (b != null) {
-                    if (b.booleanValue()) {
-                        arrows.put(uuid, Boolean.FALSE);
+                if (metadata.isBoolean(e, "isUltimate")) {
+                    if (metadata.isBoolean(e, "hasHitEntity")) {
+                        if (metadata.isBoolean(e, "hitEntiyEventFired")) {
+                            e.remove();
+                        } else {
+                            metadata.setBoolean(e, "hitEntiyEventFired", true);
+                        }
                     } else {
-                        arrows.remove(uuid);
-                        Entity e = evt.getEntity().getWorld().spawnEntity(evt.getEntity().getLocation(), EntityType.ZOMBIE);
-                        evt.getEntity().remove();
+                        int level = metadata.getInt(e, "ultimateLevel");
+                        plugin.getAttack().effect(e.getLocation(), level);
+                        e.remove();
                     }
                 }
             }
@@ -87,9 +77,17 @@ public class ArrowAttackListener implements Listener {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent evt) {
-        UUID uuid = evt.getDamager().getUniqueId();
-        if (arrows.containsKey(uuid)) {
-            arrows.put(uuid, Boolean.TRUE);
+        Entity damager = evt.getDamager();
+        if (damager instanceof Arrow && metadata.isBoolean(damager, "isUltimate")) {
+            metadata.setBoolean(damager, "hasHitEntity", true);
+        }
+        if (damager instanceof Player) {
+            Player p = (Player) damager;
+            int level = plugin.getArrow().getLevel(p.getItemInHand());
+            if (level >= 0) {
+                evt.setCancelled(true);
+                plugin.getAttack().launchAttack(p, level);
+            }
         }
     }
 }

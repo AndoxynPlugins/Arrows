@@ -37,8 +37,7 @@ public class ItemArrowTracker {
         ItemMeta meta = arrow.getItemMeta();
         meta.setDisplayName(ChatColor.DARK_RED + "Ultimate");
         meta.setLore(Arrays.asList(ChatColor.GREEN + "The ultimate weapon",
-                ChatColor.LIGHT_PURPLE + "Level 01",
-                ChatColor.RED + "10%" + ChatColor.GRAY + " chance to spawn blaze"));
+                ChatColor.LIGHT_PURPLE + "Level 01"));
         arrow.setItemMeta(meta);
     }
 
@@ -55,7 +54,7 @@ public class ItemArrowTracker {
             return -1;
         }
         List<String> lore = meta.getLore();
-        if (lore == null || lore.size() < 3 || !lore.get(0).equals(LORE0)) {
+        if (lore == null || lore.size() < 2 || !lore.get(0).equals(LORE0)) {
             return -1;
         }
         String levelString = lore.get(1);

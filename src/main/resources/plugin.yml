@@ -6,3 +6,6 @@ description: ${project.description}
 url: https://github.com/daboross/Arrows
 commands:
   ua:
+permissions:
+  ultimatearrow.get:
+    default: true
