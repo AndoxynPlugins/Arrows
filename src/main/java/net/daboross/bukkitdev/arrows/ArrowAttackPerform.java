@@ -45,7 +45,12 @@ public class ArrowAttackPerform {
     }
 
     public void knockbackPlayer(Player p, double force) {
-        p.setVelocity(p.getVelocity().add(p.getLocation().getDirection().multiply(-force)));
+        Vector forceV = p.getLocation().getDirection().multiply(-force);
+        Vector velo = p.getVelocity();
+        p.setVelocity(velo.add(forceV));
+        if (velo.getY() > 0) {
+            p.setFallDistance(velo.getY() > 10 ? -2 : 0);
+        }
     }
 
     public void launchArrows(Player player, int level) {
@@ -67,47 +72,21 @@ public class ArrowAttackPerform {
     private final Random r = new Random();
 
     public void effect(Location location, int level) {
-        if (level == 1) {
-            switch (r.nextInt(30)) {
-                case 0:
-                case 1:
-                    Zombie zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-                    zombie.setCustomName("Zombie level " + level);
-                    break;
-                case 2:
-                case 3:
-                    Blaze blaze = (Blaze) location.getWorld().spawnEntity(location, EntityType.BLAZE);
-                    blaze.setCustomName("Ultimate blaze level " + level);
-                    break;
-                case 4:
-                    Vector direction = location.getDirection().multiply(-1);
-                    launchArrow(location, direction, null, 2);
-                    launchArrow(location, direction, null, 2);
-                    launchArrow(location, direction, null, 2);
-                    break;
-            }
-        } else if (level == 2) {
-            switch (r.nextInt(10)) {
-                case 0:
-                    Zombie zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-                    zombie.setCustomName("Zombie level " + level);
-                    break;
-                case 1:
-                    Blaze blaze = (Blaze) location.getWorld().spawnEntity(location, EntityType.BLAZE);
-                    blaze.setCustomName("Ultimate blaze level " + level);
-                    break;
-            }
-        } else if (level == 3) {
-            switch (r.nextInt(5)) {
-                case 0:
-                    Zombie zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-                    zombie.setCustomName("Zombie level " + level);
-                    break;
-                case 1:
-                    Blaze blaze = (Blaze) location.getWorld().spawnEntity(location, EntityType.BLAZE);
-                    blaze.setCustomName("Ultimate blaze level " + level);
-                    break;
-            }
+        switch (r.nextInt(100)) {
+            case 0:
+                Zombie zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
+                zombie.setCustomName("Zombie level " + level);
+                break;
+            case 1:
+                Blaze blaze = (Blaze) location.getWorld().spawnEntity(location, EntityType.BLAZE);
+                blaze.setCustomName("Ultimate blaze level " + level);
+                break;
+            case 2:
+                Vector direction = location.getDirection().multiply(-1);
+                launchArrow(location, direction, null, 2);
+                launchArrow(location, direction, null, 2);
+                launchArrow(location, direction, null, 2);
+                break;
         }
     }
 }

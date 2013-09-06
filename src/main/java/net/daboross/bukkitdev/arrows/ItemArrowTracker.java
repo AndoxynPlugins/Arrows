@@ -50,7 +50,7 @@ public class ItemArrowTracker {
             return -1;
         }
         ItemMeta meta = stack.getItemMeta();
-        if (!meta.getDisplayName().equals(ChatColor.DARK_RED + "Ultimate")) {
+        if (meta == null || !meta.getDisplayName().equals(ChatColor.DARK_RED + "Ultimate")) {
             return -1;
         }
         List<String> lore = meta.getLore();
