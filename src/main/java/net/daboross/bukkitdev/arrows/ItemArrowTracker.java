@@ -33,35 +33,35 @@ public class ItemArrowTracker {
     private final ItemStack arrow;
 
     public ItemArrowTracker() {
-        arrow = new ItemStack(Material.ARROW);
+        arrow = new ItemStack( Material.BLAZE_POWDER );
         ItemMeta meta = arrow.getItemMeta();
-        meta.setDisplayName(ChatColor.DARK_RED + "Ultimate");
-        meta.setLore(Arrays.asList(ChatColor.GREEN + "The ultimate weapon",
-                ChatColor.LIGHT_PURPLE + "Level 01"));
-        arrow.setItemMeta(meta);
+        meta.setDisplayName( ChatColor.DARK_RED + "Ultimate" );
+        meta.setLore( Arrays.asList( ChatColor.GREEN + "The ultimate weapon",
+                ChatColor.LIGHT_PURPLE + "Level 01" ) );
+        arrow.setItemMeta( meta );
     }
 
     public ItemStack getArrow() {
         return arrow.clone();
     }
 
-    public int getLevel(ItemStack stack) {
-        if (stack == null || stack.getType() != Material.ARROW) {
+    public int getLevel( ItemStack stack ) {
+        if ( stack == null || stack.getType() != Material.BLAZE_POWDER ) {
             return -1;
         }
         ItemMeta meta = stack.getItemMeta();
-        if (meta == null || !meta.getDisplayName().equals(ChatColor.DARK_RED + "Ultimate")) {
+        if ( meta == null || !meta.getDisplayName().equals( ChatColor.DARK_RED + "Ultimate" ) ) {
             return -1;
         }
         List<String> lore = meta.getLore();
-        if (lore == null || lore.size() < 2 || !lore.get(0).equals(LORE0)) {
+        if ( lore == null || lore.size() < 2 || !lore.get( 0 ).equals( LORE0 ) ) {
             return -1;
         }
-        String levelString = lore.get(1);
-        String levelNumberString = levelString.substring(levelString.length() - 2);
+        String levelString = lore.get( 1 );
+        String levelNumberString = levelString.substring( levelString.length() - 2 );
         try {
-            return Integer.parseInt(levelNumberString);
-        } catch (NumberFormatException ex) {
+            return Integer.parseInt( levelNumberString );
+        } catch ( NumberFormatException ex ) {
             return -1;
         }
     }

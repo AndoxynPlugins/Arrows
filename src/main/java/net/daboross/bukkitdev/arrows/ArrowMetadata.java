@@ -30,32 +30,32 @@ public class ArrowMetadata {
     private final ArrowsPlugin plugin;
     private final JustExists justExists = new JustExists();
 
-    public ArrowMetadata(ArrowsPlugin plugin) {
+    public ArrowMetadata( ArrowsPlugin plugin ) {
         this.plugin = plugin;
     }
 
-    public void setBoolean(Metadatable metadatable, String name, boolean value) {
-        if (value) {
-            metadatable.setMetadata(name, justExists);
+    public void setBoolean( Metadatable metadatable, String name, boolean value ) {
+        if ( value ) {
+            metadatable.setMetadata( name, justExists );
         } else {
-            metadatable.removeMetadata(name, plugin);
+            metadatable.removeMetadata( name, plugin );
         }
     }
 
-    public boolean isBoolean(Metadatable metadatable, String name) {
-        return metadatable.hasMetadata(name);
+    public boolean isBoolean( Metadatable metadatable, String name ) {
+        return metadatable.hasMetadata( name );
     }
 
-    public void setInt(Metadatable metadatable, String name, int value) {
-        metadatable.setMetadata(name, new IntValue(value));
+    public void setInt( Metadatable metadatable, String name, int value ) {
+        metadatable.setMetadata( name, new IntValue( value ) );
     }
 
-    public int getInt(Metadatable metadatable, String name) {
-        List<MetadataValue> value = metadatable.getMetadata(name);
-        if (value.isEmpty()) {
+    public int getInt( Metadatable metadatable, String name ) {
+        List<MetadataValue> value = metadatable.getMetadata( name );
+        if ( value.isEmpty() ) {
             return -1;
         } else {
-            return value.get(0).asInt();
+            return value.get( 0 ).asInt();
         }
     }
 
@@ -120,13 +120,13 @@ public class ArrowMetadata {
 
         private final int value;
 
-        public IntValue(int value) {
+        public IntValue( int value ) {
             this.value = value;
         }
 
         @Override
         public Object value() {
-            return Integer.valueOf(value);
+            return Integer.valueOf( value );
         }
 
         @Override
@@ -166,7 +166,7 @@ public class ArrowMetadata {
 
         @Override
         public String asString() {
-            return Integer.toString(value);
+            return Integer.toString( value );
         }
 
         @Override

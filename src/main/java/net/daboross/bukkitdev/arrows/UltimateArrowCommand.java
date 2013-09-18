@@ -35,45 +35,45 @@ public class UltimateArrowCommand implements CommandExecutor, TabCompleter {
 
     private final ArrowsPlugin plugin;
 
-    public UltimateArrowCommand(ArrowsPlugin plugin) {
+    public UltimateArrowCommand( ArrowsPlugin plugin ) {
         this.plugin = plugin;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.DARK_RED + "You aren't a player.");
+    public boolean onCommand( CommandSender sender, Command command, String label, String[] args ) {
+        if ( !( sender instanceof Player ) ) {
+            sender.sendMessage( ChatColor.DARK_RED + "You aren't a player." );
             return true;
         }
-        if (args.length != 0) {
-            sender.sendMessage(ChatColor.DARK_RED + "Too many arguments.");
+        if ( args.length != 0 ) {
+            sender.sendMessage( ChatColor.DARK_RED + "Too many arguments." );
             return true;
         }
         Player p = (Player) sender;
         PlayerInventory inv = p.getInventory();
         int slot = inv.firstEmpty();
-        if (slot < 0) {
-            sender.sendMessage(ChatColor.DARK_RED + "You don't have room.");
+        if ( slot < 0 ) {
+            sender.sendMessage( ChatColor.DARK_RED + "You don't have room." );
             return true;
         }
-        inv.setItem(slot, plugin.getArrow().getArrow());
+        inv.setItem( slot, plugin.getArrow().getArrow() );
         return true;
     }
 
-    public void registerIfExists(PluginCommand command) {
-        if (command == null) {
+    public void registerIfExists( PluginCommand command ) {
+        if ( command == null ) {
             return;
         }
-        command.setExecutor(this);
-        command.setTabCompleter(this);
-        command.setPermission("ultimatearrow.get");
-        command.setPermissionMessage(ChatColor.DARK_RED + "You do not have permission.");
-        command.setUsage(ChatColor.GRAY + "/<command>");
-        command.setDescription("Gives you the ultimate arrow.");
+        command.setExecutor( this );
+        command.setTabCompleter( this );
+        command.setPermission( "ultimatearrow.get" );
+        command.setPermissionMessage( ChatColor.DARK_RED + "You do not have permission." );
+        command.setUsage( ChatColor.GRAY + "/<command>" );
+        command.setDescription( "Gives you the ultimate arrow." );
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete( CommandSender sender, Command command, String alias, String[] args ) {
         return Collections.EMPTY_LIST;
     }
 }

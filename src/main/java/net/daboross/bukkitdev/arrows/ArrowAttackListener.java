@@ -37,56 +37,56 @@ public class ArrowAttackListener implements Listener {
     private final ArrowsPlugin plugin;
     private final ArrowMetadata metadata;
 
-    public ArrowAttackListener(ArrowsPlugin plugin) {
+    public ArrowAttackListener( ArrowsPlugin plugin ) {
         this.plugin = plugin;
         this.metadata = plugin.getMetadata();
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent evt) {
+    public void onInteract( PlayerInteractEvent evt ) {
         Player p = evt.getPlayer();
-        int level = plugin.getArrow().getLevel(p.getItemInHand());
-        if (level >= 0) {
-            evt.setCancelled(true);
-            plugin.getAttack().launchAttack(p, level);
+        int level = plugin.getArrow().getLevel( p.getItemInHand() );
+        if ( level >= 0 ) {
+            evt.setCancelled( true );
+            plugin.getAttack().launchAttack( p, level );
         }
     }
 
     @EventHandler
-    public void onHit(ProjectileHitEvent evt) {
+    public void onHit( ProjectileHitEvent evt ) {
         final Entity e = evt.getEntity();
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (metadata.isBoolean(e, "isUltimate")) {
-                    if (metadata.isBoolean(e, "hasHitEntity")) {
-                        if (metadata.isBoolean(e, "hitEntiyEventFired")) {
+                if ( metadata.isBoolean( e, "isUltimate" ) ) {
+                    if ( metadata.isBoolean( e, "hasHitEntity" ) ) {
+                        if ( metadata.isBoolean( e, "hitEntiyEventFired" ) ) {
                             e.remove();
                         } else {
-                            metadata.setBoolean(e, "hitEntiyEventFired", true);
+                            metadata.setBoolean( e, "hitEntiyEventFired", true );
                         }
                     } else {
-                        int level = metadata.getInt(e, "ultimateLevel");
-                        plugin.getAttack().effect(e.getLocation(), level);
+                        int level = metadata.getInt( e, "ultimateLevel" );
+                        plugin.getAttack().effect( e.getLocation(), level );
                         e.remove();
                     }
                 }
             }
-        }.runTask(plugin);
+        }.runTask( plugin );
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent evt) {
+    public void onDamage( EntityDamageByEntityEvent evt ) {
         Entity damager = evt.getDamager();
-        if (damager instanceof Arrow && metadata.isBoolean(damager, "isUltimate")) {
-            metadata.setBoolean(damager, "hasHitEntity", true);
+        if ( damager instanceof Arrow && metadata.isBoolean( damager, "isUltimate" ) ) {
+            metadata.setBoolean( damager, "hasHitEntity", true );
         }
-        if (damager instanceof Player) {
+        if ( damager instanceof Player ) {
             Player p = (Player) damager;
-            int level = plugin.getArrow().getLevel(p.getItemInHand());
-            if (level >= 0) {
-                evt.setCancelled(true);
-                plugin.getAttack().launchAttack(p, level);
+            int level = plugin.getArrow().getLevel( p.getItemInHand() );
+            if ( level >= 0 ) {
+                evt.setCancelled( true );
+                plugin.getAttack().launchAttack( p, level );
             }
         }
     }

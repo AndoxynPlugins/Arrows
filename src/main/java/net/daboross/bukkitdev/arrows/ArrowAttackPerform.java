@@ -34,58 +34,58 @@ public class ArrowAttackPerform {
     private final ArrowsPlugin plugin;
     private final ArrowMetadata metadata;
 
-    public ArrowAttackPerform(ArrowsPlugin plugin) {
+    public ArrowAttackPerform( ArrowsPlugin plugin ) {
         this.plugin = plugin;
         this.metadata = plugin.getMetadata();
     }
 
-    public void launchAttack(Player p, int level) {
-        knockbackPlayer(p, 0.6);
-        launchArrows(p, level);
+    public void launchAttack( Player p, int level ) {
+        knockbackPlayer( p, 0.6 );
+        launchArrows( p, level );
     }
 
-    public void knockbackPlayer(Player p, double force) {
-        Vector forceV = p.getLocation().getDirection().multiply(-force);
+    public void knockbackPlayer( Player p, double force ) {
+        Vector forceV = p.getLocation().getDirection().multiply( -force );
         Vector velo = p.getVelocity();
-        p.setVelocity(velo.add(forceV));
-        if (velo.getY() > 0) {
-            p.setFallDistance(velo.getY() > 10 ? -2 : 0);
+        p.setVelocity( velo.add( forceV ) );
+        if ( velo.getY() > 0 ) {
+            p.setFallDistance( velo.getY() > 10 ? -2 : 0 );
         }
     }
 
-    public void launchArrows(Player player, int level) {
+    public void launchArrows( Player player, int level ) {
         Location arrowLoc = player.getEyeLocation().clone();
-        arrowLoc.add(arrowLoc.getDirection());
+        arrowLoc.add( arrowLoc.getDirection() );
         Vector direction = arrowLoc.getDirection();
-        for (int i = 0; i < 2; i++) {
-            launchArrow(arrowLoc, direction, player, level);
+        for ( int i = 0 ; i < 2 ; i++ ) {
+            launchArrow( arrowLoc, direction, player, level );
         }
     }
 
-    public void launchArrow(Location location, Vector direction, Player shooter, int level) {
-        Arrow a = location.getWorld().spawnArrow(location, direction, 2.0f, 2);
-        a.setBounce(false);
-        a.setShooter(shooter);
-        metadata.setBoolean(a, "isUltimate", true);
-        metadata.setInt(a, "ultimateLevel", level);
+    public void launchArrow( Location location, Vector direction, Player shooter, int level ) {
+        Arrow a = location.getWorld().spawnArrow( location, direction, 2.0f, 2 );
+        a.setBounce( false );
+        a.setShooter( shooter );
+        metadata.setBoolean( a, "isUltimate", true );
+        metadata.setInt( a, "ultimateLevel", level );
     }
     private final Random r = new Random();
 
-    public void effect(Location location, int level) {
-        switch (r.nextInt(100)) {
+    public void effect( Location location, int level ) {
+        switch ( r.nextInt( 100 ) ) {
             case 0:
-                Zombie zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
-                zombie.setCustomName("Zombie level " + level);
+                Zombie zombie = (Zombie) location.getWorld().spawnEntity( location, EntityType.ZOMBIE );
+                zombie.setCustomName( "Zombie level " + level );
                 break;
             case 1:
-                Blaze blaze = (Blaze) location.getWorld().spawnEntity(location, EntityType.BLAZE);
-                blaze.setCustomName("Ultimate blaze level " + level);
+                Blaze blaze = (Blaze) location.getWorld().spawnEntity( location, EntityType.BLAZE );
+                blaze.setCustomName( "Ultimate blaze level " + level );
                 break;
             case 2:
-                Vector direction = location.getDirection().multiply(-1);
-                launchArrow(location, direction, null, 2);
-                launchArrow(location, direction, null, 2);
-                launchArrow(location, direction, null, 2);
+                Vector direction = location.getDirection().multiply( -1 );
+                launchArrow( location, direction, null, 2 );
+                launchArrow( location, direction, null, 2 );
+                launchArrow( location, direction, null, 2 );
                 break;
         }
     }

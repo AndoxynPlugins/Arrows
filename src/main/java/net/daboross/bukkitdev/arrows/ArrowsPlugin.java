@@ -35,18 +35,18 @@ public class ArrowsPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         arrow = new ItemArrowTracker();
-        metadata = new ArrowMetadata(this);
-        attack = new ArrowAttackPerform(this);
+        metadata = new ArrowMetadata( this );
+        attack = new ArrowAttackPerform( this );
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new ArrowAttackListener(this), this);
-        new UltimateArrowCommand(this).registerIfExists(getCommand("ua"));
+        pm.registerEvents( new ArrowAttackListener( this ), this );
+        new UltimateArrowCommand( this ).registerIfExists( getCommand( "ua" ) );
         MetricsLite metrics = null;
         try {
-            metrics = new MetricsLite(this);
-        } catch (IOException ex) {
-            getLogger().log(Level.WARNING, "Unable to create Metrics", ex);
+            metrics = new MetricsLite( this );
+        } catch ( IOException ex ) {
+            getLogger().log( Level.WARNING, "Unable to create Metrics", ex );
         }
-        if (metrics != null) {
+        if ( metrics != null ) {
             metrics.start();
         }
     }
