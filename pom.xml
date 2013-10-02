@@ -95,7 +95,7 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>org.mcstats.bukkit:metrics-lite</include>
+                                    <include>net.daboross.metrics.bukkit:metrics-lite</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
